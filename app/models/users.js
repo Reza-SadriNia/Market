@@ -15,7 +15,8 @@ const UserSchema = new Schema({
   },
   bills: { type: [], default: [] },
   discount: { type: Number, default: 0 },
-  birthday: { type: String }
+  birthday: { type: String },
+  roles: { type: String, default: "USER" }
 })
 
 module.exports = {
