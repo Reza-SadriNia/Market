@@ -3,6 +3,8 @@ const app = express()
 const mongoose = require("mongoose")
 const morgan = require("morgan")
 const path = require("path")
+const createErrors = require("http-errors")
+
 const { AllRoutes } = require("./router/router")
 
 module.exports = class Application {
@@ -45,15 +47,12 @@ module.exports = class Application {
   }
   errorHandler() {
     app.use((req, res, next) => {
-      return res.status(404).json({
-        statusCode: 404,
-        success: false,
-        message: "Route Not Found!"
-      })
+      next(createErrors.NotFound("Route Not Found!"))
     })
     app.use((err, req, res, next) => {
-      const statusCode = err?.status || 500
-      const message = err?.message || "Internal Server Error"
+      const servererror = createErrors.InternalServerError()
+      const statusCode = err?.status || servererror.status
+      const message = err?.message || servererror.message
       return res.status(statusCode).json({
         statusCode,
         message

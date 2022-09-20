@@ -1,0 +1,8 @@
+### 
+Post http://localhost:3000/user/auth
+Content-Type: application/json
+
+{
+  "mobile" : "09392866968"
+  # "password" : "jkss"
+}
