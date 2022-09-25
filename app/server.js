@@ -4,7 +4,8 @@ const mongoose = require("mongoose")
 const morgan = require("morgan")
 const path = require("path")
 const createErrors = require("http-errors")
-
+const swaggerui = require("swagger-ui-express")
+const swaggerdoc = require("swagger-jsdoc")
 const { AllRoutes } = require("./router/router")
 
 module.exports = class Application {
@@ -36,6 +37,21 @@ module.exports = class Application {
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
     app.use(express.static(path.join(__dirname, "..", "public")))
+    app.use("/api-doc", swaggerui.serve, swaggerui.setup(swaggerdoc({
+      swaggerDefinition: {
+        info: {
+          title: "salamat-soft.ir",
+          version: "2.0.0",
+          description: "bigget store"
+        },
+        servers: [
+          {
+            url: "http://localhost:3000"
+          }
+        ]
+      },
+      apis: ["./app/router/**/*.js"]
+    })))
   }
   createServer(PORT) {
     app.listen(PORT, () => {
